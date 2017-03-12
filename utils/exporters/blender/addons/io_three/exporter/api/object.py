@@ -518,10 +518,6 @@ def extract_mesh(obj, options, recalculate=False):
 
         obj.data = original_mesh
 
-    if not options.get(constants.SCENE):
-        xrot = mathutils.Matrix.Rotation(-math.pi/2, 4, 'X')
-        mesh_node.transform(xrot * obj.matrix_world)
-
     # blend shapes
     if options.get(constants.BLEND_SHAPES) and not options.get(constants.MORPH_TARGETS):
         original_mesh = obj.data
@@ -558,6 +554,10 @@ def extract_mesh(obj, options, recalculate=False):
                             break  # no need to continue to loop
                     pass
             obj.data = original_mesh
+
+    if not options.get(constants.SCENE):
+        xrot = mathutils.Matrix.Rotation(-math.pi/2, 4, 'X')
+        mesh_node.transform(xrot * obj.matrix_world, True)
 
     # now generate a unique name
     index = 0
