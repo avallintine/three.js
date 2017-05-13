@@ -64,7 +64,7 @@ Object.assign( KeyframeTrack, {
 
 			// by default, we asssume a constructor compatible with the base
 			return new trackType(
-					json.name, json.times, json.values, json.interpolation );
+					json.name, json.times, json.values, json.interpolation, json.driver, json.data );
 
 		}
 

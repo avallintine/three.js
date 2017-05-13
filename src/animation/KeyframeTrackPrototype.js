@@ -35,6 +35,18 @@ KeyframeTrackPrototype = {
 
 	},
 
+	setDriver: function ( driver ) {
+
+		this.driver = driver;
+
+	},
+
+	setData: function ( data ) {
+
+		this.data = data;
+
+	},
+
 	setInterpolation: function ( interpolation ) {
 
 		var factoryMethod;

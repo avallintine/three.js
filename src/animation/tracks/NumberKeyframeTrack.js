@@ -10,9 +10,9 @@ import { KeyframeTrackConstructor } from '../KeyframeTrackConstructor';
  * @author tschw
  */
 
-function NumberKeyframeTrack( name, times, values, interpolation ) {
+function NumberKeyframeTrack( name, times, values, interpolation, driver, data ) {
 
-	KeyframeTrackConstructor.call( this, name, times, values, interpolation );
+	KeyframeTrackConstructor.call( this, name, times, values, interpolation, driver, data );
 
 }
 

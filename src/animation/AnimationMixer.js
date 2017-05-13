@@ -15,9 +15,10 @@ import { AnimationClip } from './AnimationClip';
  * @author tschw
  */
 
-function AnimationMixer( root ) {
+function AnimationMixer( root, drivers ) {
 
 	this._root = root;
+	this._drivers = drivers;
 	this._initMemoryManager();
 	this._accuIndex = 0;
 
@@ -36,6 +37,7 @@ Object.assign( AnimationMixer.prototype, EventDispatcher.prototype, {
 			nTracks = tracks.length,
 			bindings = action._propertyBindings,
 			interpolants = action._interpolants,
+			drivers = action._drivers,
 			rootUuid = root.uuid,
 			bindingsByRoot = this._bindingsByRootAndName,
 			bindingsByName = bindingsByRoot[ rootUuid ];
@@ -91,6 +93,10 @@ Object.assign( AnimationMixer.prototype, EventDispatcher.prototype, {
 			}
 
 			interpolants[ i ].resultBuffer = binding.buffer;
+
+			if ( track.driver ) {
+				drivers[ i ] = this._drivers[track.driver];
+			}
 
 		}
 
@@ -591,7 +597,7 @@ Object.assign( AnimationMixer.prototype, EventDispatcher.prototype, {
 
 	},
 
-	// advance the time and update apply the animation
+	// advance the time and update the animation
 	update: function ( deltaTime ) {
 
 		deltaTime *= this.timeScale;
@@ -614,10 +620,17 @@ Object.assign( AnimationMixer.prototype, EventDispatcher.prototype, {
 
 		}
 
+		return this;
+
+	},
+
+	apply: function () {
+
 		// update scene graph
 
 		var bindings = this._bindings,
-			nBindings = this._nActiveBindings;
+			nBindings = this._nActiveBindings,
+			accuIndex = this._accuIndex;
 
 		for ( var i = 0; i !== nBindings; ++ i ) {
 

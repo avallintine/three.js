@@ -1,6 +1,6 @@
 import { AnimationUtils } from './AnimationUtils';
 
-function KeyframeTrackConstructor( name, times, values, interpolation ) {
+function KeyframeTrackConstructor( name, times, values, interpolation, driver, data ) {
 
 	if ( name === undefined ) throw new Error( "track name is undefined" );
 
@@ -16,6 +16,9 @@ function KeyframeTrackConstructor( name, times, values, interpolation ) {
 	this.values = AnimationUtils.convertArray( values, this.ValueBufferType );
 
 	this.setInterpolation( interpolation || this.DefaultInterpolation );
+
+	this.setDriver( driver );
+	this.setData( data );
 
 	this.validate();
 	this.optimize();

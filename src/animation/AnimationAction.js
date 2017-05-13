@@ -41,6 +41,8 @@ function AnimationAction( mixer, clip, localRoot ) {
 	// inside: PropertyMixer (managed by the mixer)
 	this._propertyBindings = new Array( nTracks );
 
+	this._drivers = new Array( nTracks );
+
 	this._cacheIndex = null;			// for the memory manager
 	this._byClipCacheIndex = null;		// for the memory manager
 
@@ -373,10 +375,25 @@ Object.assign( AnimationAction.prototype, {
 
 			var interpolants = this._interpolants;
 			var propertyMixers = this._propertyBindings;
+			var drivers = this._drivers;
 
 			for ( var j = 0, m = interpolants.length; j !== m; ++ j ) {
 
-				interpolants[ j ].evaluate( clipTime );
+				if ( drivers[ j ] ) {
+
+					drivers[ j ].evaluate(
+						interpolants[ j ].resultBuffer,
+						propertyMixers[ j ].binding,
+						this._clip.tracks[ j ].data,
+						time
+					);
+
+				} else {
+
+					interpolants[ j ].evaluate( clipTime );
+
+				}
+
 				propertyMixers[ j ].accumulate( accuIndex, weight );
 
 			}
