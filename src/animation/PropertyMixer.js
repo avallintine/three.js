@@ -59,7 +59,7 @@ function PropertyMixer( binding, typeName, valueSize ) {
 Object.assign( PropertyMixer.prototype, {
 
 	// accumulate data in the 'incoming' region into 'accu<i>'
-	accumulate: function ( accuIndex, weight ) {
+	accumulate: function ( accuIndex, weight, blend ) {
 
 		// note: happily accumulating nothing when weight = 0, the caller knows
 		// the weight and shouldn't have made the call in the first place
@@ -69,6 +69,18 @@ Object.assign( PropertyMixer.prototype, {
 			offset = accuIndex * stride + stride,
 
 			currentWeight = this.cumulativeWeight;
+
+		if ( blend === "add" ) {
+
+			var originalValueOffset = stride * 3;
+
+			for ( var i = 0; i !== stride; ++ i ) {
+
+				buffer[ i ] += buffer[ originalValueOffset + i ]
+
+			}
+
+		}
 
 		if ( currentWeight === 0 ) {
 
@@ -108,6 +120,8 @@ Object.assign( PropertyMixer.prototype, {
 			binding = this.binding;
 
 		this.cumulativeWeight = 0;
+
+		// do we want this?
 
 		if ( weight < 1 ) {
 

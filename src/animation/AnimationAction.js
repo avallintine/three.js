@@ -16,6 +16,7 @@ function AnimationAction( mixer, clip, localRoot ) {
 	this._mixer = mixer;
 	this._clip = clip;
 	this._localRoot = localRoot || null;
+	this._blend = clip.blend;
 
 	var tracks = clip.tracks,
 		nTracks = tracks.length,
@@ -394,7 +395,7 @@ Object.assign( AnimationAction.prototype, {
 
 				}
 
-				propertyMixers[ j ].accumulate( accuIndex, weight );
+				propertyMixers[ j ].accumulate( accuIndex, weight, this._blend );
 
 			}
 

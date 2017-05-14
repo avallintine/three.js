@@ -13,11 +13,12 @@ import { _Math } from '../math/Math';
  * @author David Sarno / http://lighthaus.us/
  */
 
-function AnimationClip( name, duration, tracks ) {
+function AnimationClip( name, duration, tracks, blend ) {
 
 	this.name = name;
 	this.tracks = tracks;
 	this.duration = ( duration !== undefined ) ? duration : - 1;
+	this.blend = blend;
 
 	this.uuid = _Math.generateUUID();
 
@@ -46,7 +47,7 @@ Object.assign( AnimationClip, {
 
 		}
 
-		return new AnimationClip( json.name, json.duration, tracks );
+		return new AnimationClip( json.name, json.duration, tracks, json.blend );
 
 	},
 
