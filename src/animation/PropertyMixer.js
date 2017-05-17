@@ -70,13 +70,13 @@ Object.assign( PropertyMixer.prototype, {
 
 			currentWeight = this.cumulativeWeight;
 
-		if ( blend === "add" ) {
+		if ( blend === "normal" ) {
 
 			var originalValueOffset = stride * 3;
 
 			for ( var i = 0; i !== stride; ++ i ) {
 
-				buffer[ i ] += buffer[ originalValueOffset + i ]
+				buffer[ i ] -= buffer[ originalValueOffset + i ]
 
 			}
 
@@ -88,7 +88,7 @@ Object.assign( PropertyMixer.prototype, {
 
 			for ( var i = 0; i !== stride; ++ i ) {
 
-				buffer[ offset + i ] = buffer[ i ];
+				buffer[ offset + i ] = buffer[ i ] * weight;
 
 			}
 
@@ -121,24 +121,30 @@ Object.assign( PropertyMixer.prototype, {
 
 		this.cumulativeWeight = 0;
 
-		// do we want this?
+		// if ( weight < 1 ) {
 
-		if ( weight < 1 ) {
+		// 	// accuN := accuN + original * ( 1 - cumulativeWeight )
 
-			// accuN := accuN + original * ( 1 - cumulativeWeight )
+		// 	var originalValueOffset = stride * 3;
 
-			var originalValueOffset = stride * 3;
+		// 	this._mixBufferRegion(
+		// 		buffer, offset, originalValueOffset, 1 - weight, stride );
 
-			this._mixBufferRegion(
-				buffer, offset, originalValueOffset, 1 - weight, stride );
-
-		}
+		// }
 
 		for ( var i = stride, e = stride + stride; i !== e; ++ i ) {
 
 			if ( buffer[ i ] !== buffer[ i + stride ] ) {
 
 				// value has changed -> update scene graph
+
+				var originalValueOffset = stride * 3;
+
+				for ( var i = 0; i !== stride; ++ i ) {
+
+					buffer[ offset ] += buffer[ originalValueOffset + i ]
+
+				}
 
 				binding.setValue( buffer, offset );
 				break;
